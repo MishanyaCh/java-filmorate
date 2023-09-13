@@ -6,10 +6,10 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.time.LocalDate;
 
 public class FilmValidation {
-    private final static int MAX_DESCRIPTION_LENGTH = 200;
-    private final static LocalDate CINEMA_BIRTHDAY = LocalDate.of(1895,12,28);
+    private static final int MAX_DESCRIPTION_LENGTH = 200;
+    private static final LocalDate CINEMA_BIRTHDAY = LocalDate.of(1895,12,28);
 
-    public void validate (Film film) {
+    public void validate(Film film) {
         String name = film.getName();
         String description = film.getDescription();
         LocalDate releaseDate = film.getReleaseDate();
