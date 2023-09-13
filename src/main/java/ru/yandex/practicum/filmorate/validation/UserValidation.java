@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.time.LocalDate;
 
 public class UserValidation {
-    private final static LocalDate CURRENT_DATE = LocalDate.now();
+    private static final LocalDate CURRENT_DATE = LocalDate.now();
 
     public void validate(User user) {
         String email = user.getEmail();
