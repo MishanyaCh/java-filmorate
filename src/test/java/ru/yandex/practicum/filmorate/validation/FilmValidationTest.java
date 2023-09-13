@@ -17,7 +17,7 @@ public class FilmValidationTest {
 
     @BeforeEach
     public void beforeEach() {
-        class myExecutable implements Executable {
+        class MyExecutable implements Executable {
 
             @Override
             public void execute() {
@@ -25,7 +25,8 @@ public class FilmValidationTest {
                 fv.validate(film);
             }
         }
-        executable = new myExecutable();
+
+        executable = new MyExecutable();
     }
 
     @Test
