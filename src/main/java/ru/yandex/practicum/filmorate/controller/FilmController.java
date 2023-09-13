@@ -15,8 +15,8 @@ import java.util.Map;
 @RequestMapping("/films")
 public class FilmController {
     private final static Logger log = LoggerFactory.getLogger(FilmController.class); // создаем логер для класса FilmController
-    private final Map<Integer, Film> films = new HashMap<>();
-    private final FilmValidation validator = new FilmValidation();
+    private final static Map<Integer, Film> films = new HashMap<>();
+    private final static FilmValidation validator = new FilmValidation();
     private int id = 0;
 
     @GetMapping
