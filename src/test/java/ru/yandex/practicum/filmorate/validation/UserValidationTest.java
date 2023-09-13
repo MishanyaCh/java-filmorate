@@ -17,7 +17,7 @@ public class UserValidationTest {
 
     @BeforeEach
     public void beforeEach() {
-        class myExecutable implements Executable {
+        class МyExecutable implements Executable {
 
             @Override
             public void execute() {
@@ -25,7 +25,8 @@ public class UserValidationTest {
                 uv.validate(user);
             }
         }
-        executable = new myExecutable();
+
+        executable = new МyExecutable();
     }
 
     @Test
