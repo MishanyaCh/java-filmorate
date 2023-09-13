@@ -14,9 +14,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final static Logger log = LoggerFactory.getLogger(UserController.class); // создаем логер для класса UserController
-    private final Map<Integer, User> users = new HashMap<>();
-    private final UserValidation validator = new UserValidation();
+    private static final Logger log = LoggerFactory.getLogger(UserController.class); // создаем логер для класса UserController
+    private static final Map<Integer, User> users = new HashMap<>();
+    private static final UserValidation validator = new UserValidation();
     private int id = 0;
 
     @GetMapping
