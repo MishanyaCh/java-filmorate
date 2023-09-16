@@ -15,7 +15,7 @@ public class FilmValidation {
         LocalDate releaseDate = film.getReleaseDate();
         int duration = film.getDuration();
 
-        if (name == null) {
+        if (name == null || name.isBlank()) {
             throw new ValidationException("Не заполнено поле 'название'. Название фильма " +
                     "должно быть обязательно!");
         }
