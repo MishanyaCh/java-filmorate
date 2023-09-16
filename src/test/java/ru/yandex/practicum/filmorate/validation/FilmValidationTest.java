@@ -30,13 +30,13 @@ public class FilmValidationTest {
     }
 
     @Test
-    public void shouldThrowValidateExceptionWhenNameIsBlank() {
-        film = new Film(" ","Описание фильма", LocalDate.of(2001, 5, 12),
+    public void shouldThrowValidateExceptionWhenNameIsEmpty() {
+        film = new Film(null,"Описание фильма", LocalDate.of(2001, 5, 12),
                 150);
         film.setId(1);
         final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("У фильма с id=" + film.getId() + " не заполнено название. Название фильма " +
-                "должно быть обязательно!", exception.getMessage());
+        assertEquals("Не заполнено поле 'название'. " +
+                "Название фильма должно быть обязательно!", exception.getMessage());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class FilmValidationTest {
                 LocalDate.of(2001, 5, 12), 150);
         film.setId(1);
         final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("У фильма с id=" + film.getId() + " слишком длинное описание. " +
+        assertEquals("Слишком длинное описание. " +
                 "Максимальная длина описания - 200 символов.", exception.getMessage());
     }
 
@@ -57,7 +57,7 @@ public class FilmValidationTest {
                 150);
         film.setId(1);
         final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("У фильма с id=" + film.getId() + " некорректно указана дата релиза. " +
+        assertEquals("Некорректно указана дата релиза. " +
                 "Дата релиза не может быть раньше чем 1895-12-28.", exception.getMessage());
     }
 
@@ -67,7 +67,7 @@ public class FilmValidationTest {
                 -150);
         film.setId(1);
         final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("У фильма с id=" + film.getId() + " некорректно указана продолжительность. " +
-                "Продолжительность фильма должна быть больше нуля!", exception.getMessage());
+        assertEquals("Некорректно указана продолжительность. " +
+                "Продолжительность фильма должна быть положительной!", exception.getMessage());
     }
 }

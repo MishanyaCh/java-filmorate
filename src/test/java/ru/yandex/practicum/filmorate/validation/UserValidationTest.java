@@ -30,13 +30,12 @@ public class UserValidationTest {
     }
 
     @Test
-    public void shouldThrowValidateExceptionWhenEmailIsBlank() {
-        user = new User(" ", "Esperanto","Миша",
+    public void shouldThrowValidateExceptionWhenEmailIsEmpty() {
+        user = new User(null, "Esperanto","Миша",
                 LocalDate.of(1992,11,15));
         user.setId(1);
         final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("У пользователя с id=" + user.getId() + " не заполнен или отсутствует e-mail адрес.",
-                exception.getMessage());
+        assertEquals("Отсутствует или некорректно указан e-mail адрес.", exception.getMessage());
     }
 
     @Test
@@ -45,17 +44,16 @@ public class UserValidationTest {
                 LocalDate.of(1992,11,15));
         user.setId(1);
         final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("У пользователя с id=" + user.getId() + " не заполнен или отсутствует e-mail адрес.",
-                exception.getMessage());
+        assertEquals("Отсутствует или некорректно указан e-mail адрес.", exception.getMessage());
     }
 
     @Test
-    public void shouldThrowValidateExceptionWhenLoginIsBlank() {
-        user = new User("chizh909@mail.ru", " ","Миша",
+    public void shouldThrowValidateExceptionWhenLoginIsEmpty() {
+        user = new User("chizh909@mail.ru", null,"Миша",
                 LocalDate.of(1992,11,15));
         user.setId(1);
         final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("У пользователя с id=" + user.getId() + " не заполнен или некорректно указан логин.",
+        assertEquals("Отсутствует или некорректно указан логин.",
                 exception.getMessage());
     }
 
@@ -65,8 +63,17 @@ public class UserValidationTest {
                 LocalDate.of(1992,11,15));
         user.setId(1);
         final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("У пользователя с id=" + user.getId() + " не заполнен или некорректно указан логин.",
+        assertEquals("Отсутствует или некорректно указан логин.",
                 exception.getMessage());
+    }
+
+    @Test
+    public void shouldSetLoginInFieldNameWhenNameIsEmpty() {
+        user = new User("chizh909@mail.ru", "Esperanto",null,
+                LocalDate.of(1992,11,15));
+        user.setId(1);
+        user.setName("Esperanto");
+        assertEquals("Esperanto", user.getLogin());
     }
 
     @Test
@@ -75,8 +82,7 @@ public class UserValidationTest {
                 LocalDate.of(2333,11,15));
         user.setId(1);
         final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("У пользователя с id=" + user.getId() + " некорректно указана дата рождения.",
-                exception.getMessage());
+        assertEquals("Некорректно указана дата рождения.", exception.getMessage());
     }
 
 }
