@@ -15,21 +15,21 @@ public class FilmValidation {
         LocalDate releaseDate = film.getReleaseDate();
         int duration = film.getDuration();
 
-        if (name.isBlank()) {
-            throw new ValidationException("У фильма с id=" + film.getId() + " не заполнено название. Название фильма " +
+        if (name == null) {
+            throw new ValidationException("Не заполнено поле 'название'. Название фильма " +
                     "должно быть обязательно!");
         }
         if (description.length() > MAX_DESCRIPTION_LENGTH) {
-            throw new ValidationException("У фильма с id=" + film.getId() + " слишком длинное описание. Максимальная " +
-                    "длина описания - " + MAX_DESCRIPTION_LENGTH + " символов.");
+            throw new ValidationException("Слишком длинное описание. Максимальная длина описания - " +
+                    MAX_DESCRIPTION_LENGTH + " символов.");
         }
         if (releaseDate.isBefore(CINEMA_BIRTHDAY)) {
-            throw new ValidationException("У фильма с id=" + film.getId() + " некорректно указана дата релиза. " +
-                    "Дата релиза не может быть раньше чем " + CINEMA_BIRTHDAY + ".");
+            throw new ValidationException("Некорректно указана дата релиза. Дата релиза не может быть " +
+                    "раньше чем " + CINEMA_BIRTHDAY + ".");
         }
         if (duration <= 0) {
-            throw new ValidationException("У фильма с id=" + film.getId() + " некорректно указана продолжительность. " +
-                    "Продолжительность фильма должна быть больше нуля!");
+            throw new ValidationException("Некорректно указана продолжительность. Продолжительность фильма " +
+                    "должна быть положительной!");
         }
     }
 }

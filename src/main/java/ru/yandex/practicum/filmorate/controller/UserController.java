@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validation.UserValidation;
 
@@ -47,7 +48,7 @@ public class UserController {
         final User savedUser = users.get(id);
         if (savedUser == null) {
             log.debug("Пользователь '{}' c id={} не найден для обновления", updatedUser.getName(), updatedUser.getId());
-            return null;
+            throw new ValidationException("Пользователь c id=" + id + " не найден для обновления");
         }
         users.put(id, updatedUser);
         log.debug("Пользователь '{}' c id={} успешно добавлен!", updatedUser.getName(), updatedUser.getId());

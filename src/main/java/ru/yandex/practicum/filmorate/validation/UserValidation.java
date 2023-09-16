@@ -14,19 +14,17 @@ public class UserValidation {
         String name = user.getName();
         LocalDate birthday = user.getBirthday();
 
-        if (email.isBlank() || !email.contains("@")) {
-            throw new ValidationException("У пользователя с id=" + user.getId() + " не заполнен или отсутствует " +
-                    "e-mail адрес.");
+        if (email == null || !email.contains("@")) {
+            throw new ValidationException("Отсутствует или некорректно указан e-mail адрес.");
         }
-        if (login.isBlank() || login.contains(" ")) {
-            throw new ValidationException("У пользователя с id=" + user.getId() + " не заполнен или некорректно " +
-                    "указан логин.");
+        if (login == null || login.contains(" ")) {
+            throw new ValidationException("Отсутствует или некорректно указан логин.");
         }
-        if (name.isBlank()) {
+        if (name == null) {
             user.setName(login);
         }
         if (birthday.isAfter(CURRENT_DATE)) {
-            throw new ValidationException("У пользователя с id=" + user.getId() + " некорректно указана дата рождения.");
+            throw new ValidationException("Некорректно указана дата рождения.");
         }
     }
 
