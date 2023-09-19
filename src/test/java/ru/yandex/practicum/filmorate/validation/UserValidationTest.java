@@ -21,40 +21,11 @@ public class UserValidationTest {
 
             @Override
             public void execute() {
-                UserValidation uv = new UserValidation();
-                uv.validate(user);
+                UserValidation.validate(user);
             }
         }
 
         executable = new MyExecutable();
-    }
-
-    @Test
-    public void shouldThrowValidateExceptionWhenEmailIsEmpty() {
-        user = new User(null, "Esperanto","Миша",
-                LocalDate.of(1992,11,15));
-        user.setId(1);
-        final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("Отсутствует или некорректно указан e-mail адрес.", exception.getMessage());
-    }
-
-    @Test
-    public void shouldThrowValidateExceptionWhenEmailDoesNotContain_Email_Symbol() {
-        user = new User("chizh909mail.ru", "Esperanto","Миша",
-                LocalDate.of(1992,11,15));
-        user.setId(1);
-        final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("Отсутствует или некорректно указан e-mail адрес.", exception.getMessage());
-    }
-
-    @Test
-    public void shouldThrowValidateExceptionWhenLoginIsEmpty() {
-        user = new User("chizh909@mail.ru", null,"Миша",
-                LocalDate.of(1992,11,15));
-        user.setId(1);
-        final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("Отсутствует или некорректно указан логин.",
-                exception.getMessage());
     }
 
     @Test
@@ -63,7 +34,7 @@ public class UserValidationTest {
                 LocalDate.of(1992,11,15));
         user.setId(1);
         final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("Отсутствует или некорректно указан логин.",
+        assertEquals("Некорректно указан логин. Логин не может содержать пробелы!",
                 exception.getMessage());
     }
 
@@ -75,14 +46,4 @@ public class UserValidationTest {
         user.setName("Esperanto");
         assertEquals("Esperanto", user.getLogin());
     }
-
-    @Test
-    public void shouldThrowValidateExceptionWhenBirthdayIsAfterCurrentDay() {
-        user = new User("chizh909@mail.ru", "Esperanto","Миша",
-                LocalDate.of(2333,11,15));
-        user.setId(1);
-        final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("Некорректно указана дата рождения.", exception.getMessage());
-    }
-
 }

@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -11,11 +12,20 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @EqualsAndHashCode
 public class User {
+    @PositiveOrZero
     private int id;
-    private final String email;
-    private final String login;
+
+    @NotBlank
+    @Email
+    private String email;
+
+    @NotNull
+    private String login;
+
     private String name;
-    private final LocalDate birthday;
+
+    @PastOrPresent
+    private LocalDate birthday;
 
     public User(String emailArg, String loginArg, String nameArg, LocalDate birthdayArg) {
         email = emailArg;

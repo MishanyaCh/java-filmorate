@@ -6,25 +6,16 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.time.LocalDate;
 
 public class UserValidation {
-    private static final LocalDate CURRENT_DATE = LocalDate.now();
 
-    public void validate(User user) {
-        String email = user.getEmail();
+    public static void validate(User user) {
         String login = user.getLogin();
         String name = user.getName();
-        LocalDate birthday = user.getBirthday();
 
-        if (email == null || !email.contains("@")) {
-            throw new ValidationException("Отсутствует или некорректно указан e-mail адрес.");
-        }
-        if (login == null || login.contains(" ")) {
-            throw new ValidationException("Отсутствует или некорректно указан логин.");
+        if (login.contains(" ")) {
+            throw new ValidationException("Некорректно указан логин. Логин не может содержать пробелы!");
         }
         if (name == null) {
             user.setName(login);
-        }
-        if (birthday.isAfter(CURRENT_DATE)) {
-            throw new ValidationException("Некорректно указана дата рождения.");
         }
     }
 

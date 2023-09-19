@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.validation.FilmValidation;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,19 +17,21 @@ import java.util.Map;
 @RequestMapping("/films")
 public class FilmController {
     private static final Logger log = LoggerFactory.getLogger(FilmController.class); // создаем логер для класса FilmController
-    private static final Map<Integer, Film> films = new HashMap<>();
-    private static final FilmValidation validator = new FilmValidation();
+    private Map<Integer, Film> films = new HashMap<>();
     private int id = 0;
 
     @GetMapping
     public List<Film> getFilms() {
-        log.debug("Количество фильмов в базе: {}", films.size());
-        return new ArrayList<>(films.values());
+        log.debug("Пришел GET /films запрос");
+        final List<Film> filmsList = new ArrayList<>(films.values());
+        log.debug("На запрос GET /films отправлен ответ c размером тела: {}", filmsList.size());
+        return filmsList;
     }
 
     @PostMapping
-    public Film createFilm(@RequestBody Film film) {
-        validator.validate(film);
+    public Film createFilm(@Valid @RequestBody Film film) {
+        FilmValidation.validate(film);
+        log.debug("Пришел POST /films запрос с телом: {}", film);
         if (film.getId() > 0) {
             log.debug("Фильм '{}' c id={} не может быть добавлен.", film.getName(), film.getId() + '\n' +
                     "Для добавления нового фильма id должен быть равен нулю");
@@ -37,13 +40,14 @@ public class FilmController {
         int filmId = generateId();
         film.setId(filmId);
         films.put(filmId, film);
-        log.debug("Фильм '{}' c id={} успешно добавлен!", film.getName(), film.getId());
+        log.debug("На запрос POST /films отправлен ответ c телом: {}", film);
         return film;
     }
 
     @PutMapping
-    public Film updateFilm(@RequestBody Film updatedFilm) {
-        validator.validate(updatedFilm);
+    public Film updateFilm(@Valid @RequestBody Film updatedFilm) {
+        FilmValidation.validate(updatedFilm);
+        log.debug("Пришел PUT /films запрос с телом: {}", updatedFilm);
         final int id = updatedFilm.getId();
         final Film savedFilm = films.get(id);
         if (savedFilm == null) {
@@ -51,7 +55,7 @@ public class FilmController {
             throw new ValidationException("Фильм с id=" + id + " не найден для обновления");
         }
         films.put(id, updatedFilm);
-        log.debug("Фильм '{}' c id={} успешно обновлен!", updatedFilm.getName(), updatedFilm.getId());
+        log.debug("На запрос PUT /films отправлен ответ c телом: {}", updatedFilm);
         return updatedFilm;
     }
 

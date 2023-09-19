@@ -4,6 +4,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -11,11 +15,19 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @EqualsAndHashCode
 public class Film {
+    @PositiveOrZero
     private int id;
-    private final String name;
-    private final String description;
-    private final LocalDate releaseDate;
-    private final int duration;
+
+    @NotBlank
+    private String name;
+
+    @Size(min = 1, max = 200)
+    private String description;
+
+    private LocalDate releaseDate;
+
+    @Positive
+    private int duration;
 
     public Film(String nameArg, String descriptionArg, LocalDate releaseDateArg, int durationArg) {
         name = nameArg;

@@ -21,34 +21,11 @@ public class FilmValidationTest {
 
             @Override
             public void execute() {
-                FilmValidation fv = new FilmValidation();
-                fv.validate(film);
+                FilmValidation.validate(film);
             }
         }
 
         executable = new MyExecutable();
-    }
-
-    @Test
-    public void shouldThrowValidateExceptionWhenNameIsEmpty() {
-        film = new Film(null,"Описание фильма", LocalDate.of(2001, 5, 12),
-                150);
-        film.setId(1);
-        final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("Не заполнено поле 'название'. " +
-                "Название фильма должно быть обязательно!", exception.getMessage());
-    }
-
-    @Test
-    public void shouldThrowValidateExceptionWhenDescriptionIsMoreThen200Symbols() {
-        film = new Film("Фильм","Прям, ну, очень длинное описание фильма: " +
-                "лплппороророророшлопоропрплрллвджаплвдаплщхуклпрхщуопхщшукорщшхоршопгуорпркацпукреке-к8пе" +
-                "шорпшеоркеопршщкеорлещзорещзорзщеорзщеореорщоезорузшлпзукщлпукшлпщзплщкопщкопщкоупококщполкзщ",
-                LocalDate.of(2001, 5, 12), 150);
-        film.setId(1);
-        final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("Слишком длинное описание. " +
-                "Максимальная длина описания - 200 символов.", exception.getMessage());
     }
 
     @Test
@@ -59,15 +36,5 @@ public class FilmValidationTest {
         final ValidationException exception = assertThrows(ValidationException.class, executable);
         assertEquals("Некорректно указана дата релиза. " +
                 "Дата релиза не может быть раньше чем 1895-12-28.", exception.getMessage());
-    }
-
-    @Test
-    public void shouldThrowValidateExceptionWhenDurationIsNegative() {
-        film = new Film("Фильм","Описание фильма", LocalDate.of(1995, 7, 18),
-                -150);
-        film.setId(1);
-        final ValidationException exception = assertThrows(ValidationException.class, executable);
-        assertEquals("Некорректно указана продолжительность. " +
-                "Продолжительность фильма должна быть положительной!", exception.getMessage());
     }
 }
