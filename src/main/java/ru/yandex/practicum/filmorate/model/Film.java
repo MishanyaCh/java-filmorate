@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +32,11 @@ public class Film {
     @Positive
     private int duration;
 
+    private RatingMPA ratingMPA;
+
+    @JsonIgnore
     private Set<Integer> likes = new HashSet<>(); // множество для хранения лайков
+    private Set<Genre> genres = new HashSet<>(); // множество для хранения жанров фильма
 
     public Film(String nameArg, String descriptionArg, LocalDate releaseDateArg, int durationArg) {
         name = nameArg;
