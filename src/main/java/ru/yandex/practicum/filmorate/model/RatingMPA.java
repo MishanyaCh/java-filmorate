@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 public class RatingMPA {
-    @Positive
+    @PositiveOrZero
     private int id;
 
     @NotBlank

@@ -5,20 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 public class Genre {
-    @Positive
+    @PositiveOrZero
     private int id;
 
     @NotBlank
     private String name;
 
-    public Genre(int idArd, String nameArg) {
-        id = idArd;
+    public Genre(String nameArg) {
         name = nameArg;
     }
 
