@@ -40,6 +40,14 @@ public class User {
         birthday = birthdayArg;
     }
 
+    public User(int idArg, String emailArg, String loginArg, String nameArg, LocalDate birthdayArg) {
+        id = idArg;
+        email = emailArg;
+        login = loginArg;
+        name = nameArg;
+        birthday = birthdayArg;
+    }
+
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
