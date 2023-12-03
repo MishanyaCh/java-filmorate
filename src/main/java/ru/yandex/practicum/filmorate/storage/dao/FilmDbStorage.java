@@ -8,7 +8,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.RatingMPA;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -34,7 +36,23 @@ public class FilmDbStorage {
     }
 
     public Film updateFilm(Film film) {
-        return null;
+        String sqlQuery = "UPDATE films SET " +
+                "name = ?, " +
+                "description = ?, " +
+                "releaseDate = ?, " +
+                "duration = ?, " +
+                "ratingMPA_id = ? " +
+                "WHERE id = ?";
+        String name = film.getName();
+        String description = film.getDescription();
+        LocalDate releaseDate = film.getReleaseDate();
+        int duration = film.getDuration();
+        RatingMPA mpa = film.getRatingMPA();
+        int id = film.getId();
+        Object[] args = {name, description, releaseDate, duration, mpa.getId(), id};
+        jdbcTemplate.update(sqlQuery, args);
+        updateFilmGenres(id, film.getGenres());
+        return film;
     }
 
     public List<Film> getFilms() {
@@ -46,11 +64,20 @@ public class FilmDbStorage {
     }
 
     private void addFilmGenres(int filmId, Set<Genre> genres) {
-        for (Genre genre: genres) {
+        String sqlQuery = "INSERT INTO films_genre (film_id, genre_id) " +
+                "VALUES (?, ?)";
+        for (Genre genre : genres) {
             int genreId = genre.getId();
-            String sqlQuery = "INSERT INTO films_genre (film_id, genre_id)" +
-                    "VALUES (?, ?)";
             jdbcTemplate.update(sqlQuery, filmId, genreId);
+        }
+    }
+
+    private void updateFilmGenres(int filmId, Set<Genre> genres) {
+        String sqlQuery = "UPDATE films_genre SET genre_id = ? " +
+                "WHERE film_id = ?";
+        for (Genre genre : genres) {
+            int genreId = genre.getId();
+            jdbcTemplate.update(sqlQuery, genreId, filmId);
         }
     }
 }
