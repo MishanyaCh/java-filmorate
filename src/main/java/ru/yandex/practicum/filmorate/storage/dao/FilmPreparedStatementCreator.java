@@ -22,7 +22,7 @@ public class FilmPreparedStatementCreator implements PreparedStatementCreator {
         String description = film.getDescription();
         LocalDate releaseDate = film.getReleaseDate();
         int duration = film.getDuration();
-        RatingMPA mpa = film.getRatingMPA();
+        RatingMPA mpa = film.getMpa();
 
         PreparedStatement ps = con.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, name);
