@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.RatingMPA;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -47,7 +49,7 @@ public class FilmDbStorage {
         String description = film.getDescription();
         LocalDate releaseDate = film.getReleaseDate();
         int duration = film.getDuration();
-        RatingMPA mpa = film.getRatingMPA();
+        RatingMPA mpa = film.getMpa();
         int id = film.getId();
         Object[] args = {name, description, releaseDate, duration, mpa.getId(), id};
         jdbcTemplate.update(sqlQuery, args);
@@ -56,7 +58,16 @@ public class FilmDbStorage {
     }
 
     public List<Film> getFilms() {
-        return null;
+        String sqlQuery = "SELECT * FROM films AS f " +
+                "INNER JOIN rating_MPA AS r ON f.ratingMPA_id = r.id";
+        List<Film> films = jdbcTemplate.query(sqlQuery, new FilmRowMapper());
+        for (Film film : films) {
+            int filmId = film.getId();
+            List<Genre> genresList = getFilmGenres(filmId);
+            Set<Genre> genres = film.getGenres();
+            genres.addAll(genresList);
+        }
+        return films;
     }
 
     public Film getFilm(int id) {
@@ -79,5 +90,22 @@ public class FilmDbStorage {
             int genreId = genre.getId();
             jdbcTemplate.update(sqlQuery, genreId, filmId);
         }
+    }
+
+    private List<Genre> getFilmGenres(int filmId) {
+        List<Genre> genres = new ArrayList<>();
+        String sqlQuery = "SELECT f_g.genre_id, g.name " +
+                "FROM films_genre AS f_g " +
+                "INNER JOIN genre AS g ON f_g.genre_id = g.id " +
+                "WHERE f_g.film_id = ?";
+
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sqlQuery, filmId);
+        while (rowSet.next()) {
+            int id = rowSet.getInt("genre_id");
+            String name = rowSet.getString("name");
+            Genre genre = new Genre(id, name);
+            genres.add(genre);
+        }
+        return genres;
     }
 }
