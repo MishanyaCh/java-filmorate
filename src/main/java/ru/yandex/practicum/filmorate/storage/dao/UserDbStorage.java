@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,8 +34,13 @@ public class UserDbStorage {
     public User update(User user) {
         String sqlQuery = "UPDATE users SET name = ?, login = ?, email = ?, birthday = ? " +
                 "WHERE id = ?";
-        jdbcTemplate.update(sqlQuery, user.getName(), user.getLogin(), user.getEmail(), user.getBirthday(),
-                user.getId());
+        String name = user.getName();
+        String login = user.getLogin();
+        String email = user.getEmail();
+        LocalDate birthday = user.getBirthday();
+        int id = user.getId();
+        Object[] args = {name, login, email, birthday, id};
+        jdbcTemplate.update(sqlQuery, args);
         return user;
     }
 
