@@ -32,7 +32,7 @@ public class Film {
     @Positive
     private int duration;
 
-    private RatingMPA ratingMPA;
+    private RatingMPA mpa;
 
     @JsonIgnore
     private Set<Integer> likes = new HashSet<>(); // множество для хранения лайков
@@ -43,6 +43,16 @@ public class Film {
         description = descriptionArg;
         releaseDate = releaseDateArg;
         duration = durationArg;
+    }
+
+    public Film(int idArg, String nameArg, String descriptionArg, LocalDate releaseDateArg, int durationArg,
+                RatingMPA mpaArg) {
+        id = idArg;
+        name = nameArg;
+        description = descriptionArg;
+        releaseDate = releaseDateArg;
+        duration = durationArg;
+        mpa = mpaArg;
     }
 
     @Override
