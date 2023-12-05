@@ -71,7 +71,20 @@ public class FilmDbStorage {
     }
 
     public Film getFilm(int id) {
-        return null;
+        String sqlQuery = "SELECT * FROM films AS f " +
+                "INNER JOIN rating_MPA AS r ON f.ratingMPA_id = r.id " +
+                "WHERE f.id = ?";
+        List<Film> films = jdbcTemplate.query(sqlQuery, new FilmRowMapper(), id);
+        if (films.isEmpty()) {
+            log.debug("Фильм с id={} не найден в базе данных.", id);
+            return null;
+        }
+        Film film = films.get(0);
+        int filmId = film.getId();
+        List<Genre> genresList = getFilmGenres(filmId);
+        Set<Genre> genres = film.getGenres();
+        genres.addAll(genresList);
+        return film;
     }
 
     private void addFilmGenres(int filmId, Set<Genre> genres) {
