@@ -4,16 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.RatingMPA;
 
 import java.util.List;
 
-public class RatingMPADBStorage {
-    private static final Logger log = LoggerFactory.getLogger(RatingMPADBStorage.class);
+@Component
+public class RatingMPADbStorage {
+    private static final Logger log = LoggerFactory.getLogger(RatingMPADbStorage.class);
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public RatingMPADBStorage(JdbcTemplate jdbcTemplateArg) {
+    public RatingMPADbStorage(JdbcTemplate jdbcTemplateArg) {
         jdbcTemplate = jdbcTemplateArg;
     }
 
