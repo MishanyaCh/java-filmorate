@@ -4,16 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.List;
 
-public class GenreDBStorage {
-    private static final Logger log = LoggerFactory.getLogger(GenreDBStorage.class);
+@Component
+public class GenreDbStorage {
+    private static final Logger log = LoggerFactory.getLogger(GenreDbStorage.class);
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public GenreDBStorage(JdbcTemplate jdbcTemplateArg) {
+    public GenreDbStorage(JdbcTemplate jdbcTemplateArg) {
         jdbcTemplate = jdbcTemplateArg;
     }
 
