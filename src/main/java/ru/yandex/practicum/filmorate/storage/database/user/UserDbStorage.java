@@ -55,7 +55,7 @@ public class UserDbStorage implements UserStorage {
         return jdbcTemplate.query(sqlQuery, new UserRowMapper());
     }
 
-     @Override
+    @Override
     public User getUser(int id) {
         String sqlQuery = "SELECT * FROM users WHERE id = ?";
         List<User> users = jdbcTemplate.query(sqlQuery, new UserRowMapper(), id);
