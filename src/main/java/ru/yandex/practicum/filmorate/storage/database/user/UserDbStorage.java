@@ -24,6 +24,7 @@ public class UserDbStorage implements UserStorage {
         jdbcTemplate = jdbcTemplateArg;
     }
 
+    @Override
     public User createUser(User user) {
         String sqlQuery = "INSERT INTO users (name, login, email, birthday) " +
                 "VALUES (?, ?, ?, ?)";
@@ -34,6 +35,7 @@ public class UserDbStorage implements UserStorage {
         return user;
     }
 
+    @Override
     public User updateUser(User user) {
         String sqlQuery = "UPDATE users SET name = ?, login = ?, email = ?, birthday = ? " +
                 "WHERE id = ?";
@@ -47,11 +49,13 @@ public class UserDbStorage implements UserStorage {
         return user;
     }
 
+    @Override
     public List<User> getUsers() {
         String sqlQuery = "SELECT * FROM users";
         return jdbcTemplate.query(sqlQuery, new UserRowMapper());
     }
 
+     @Override
     public User getUser(int id) {
         String sqlQuery = "SELECT * FROM users WHERE id = ?";
         List<User> users = jdbcTemplate.query(sqlQuery, new UserRowMapper(), id);
@@ -62,12 +66,14 @@ public class UserDbStorage implements UserStorage {
         return users.get(0);
     }
 
+    @Override
     public void addFriend(int userId, int friendId) {
         String sqlQuery = "INSERT INTO friends_list (user_id, friend_id) " +
                 "VALUES (?, ?)";
         jdbcTemplate.update(sqlQuery, userId, friendId);
     }
 
+    @Override
     public void deleteFriend(int userId, int friendId) {
         String sqlQuery = "DELETE FROM friends_list" +
                 "WHERE user_id = ? AND friend_id = ?";

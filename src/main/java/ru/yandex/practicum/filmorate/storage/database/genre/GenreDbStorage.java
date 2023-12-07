@@ -20,11 +20,13 @@ public class GenreDbStorage implements GenreStorage {
         jdbcTemplate = jdbcTemplateArg;
     }
 
+    @Override
     public List<Genre> getGenres() {
         String qslQuery = "SELECT * FROM genre";
         return jdbcTemplate.query(qslQuery, new GenreRowMapper());
     }
 
+    @Override
     public Genre getGenre(int id) {
         String qslQuery = "SELECT * FROM genre WHERE id = ?";
         List<Genre> genres = jdbcTemplate.query(qslQuery, new GenreRowMapper(), id);

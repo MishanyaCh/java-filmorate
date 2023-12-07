@@ -20,11 +20,13 @@ public class RatingMPADbStorage implements RatingMPAStorage {
         jdbcTemplate = jdbcTemplateArg;
     }
 
+    @Override
     public List<RatingMPA> getRatingsMPA() {
         String sqlQuery = "SELECT * FROM rating_MPA";
         return jdbcTemplate.query(sqlQuery, new RatingMPARowMapper());
     }
 
+    @Override
     public RatingMPA getRatingMPA(int id) {
         String sqlQuery = "SELECT * FROM rating_MPA WHERE id = ?";
         List<RatingMPA> ratingMPAList = jdbcTemplate.query(sqlQuery, new RatingMPARowMapper(), id);
