@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.dao;
+package ru.yandex.practicum.filmorate.storage.database.genre;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

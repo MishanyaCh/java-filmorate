@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.dao;
+package ru.yandex.practicum.filmorate.storage.database.film;
 
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import ru.yandex.practicum.filmorate.model.Film;
