@@ -8,13 +8,14 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
 @Component
-public class UserDbStorage {
+public class UserDbStorage implements UserStorage {
     private static final Logger log = LoggerFactory.getLogger(UserDbStorage.class);
     private final JdbcTemplate jdbcTemplate;
 
@@ -23,7 +24,7 @@ public class UserDbStorage {
         jdbcTemplate = jdbcTemplateArg;
     }
 
-    public User create(User user) {
+    public User createUser(User user) {
         String sqlQuery = "INSERT INTO users (name, login, email, birthday) " +
                 "VALUES (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -33,7 +34,7 @@ public class UserDbStorage {
         return user;
     }
 
-    public User update(User user) {
+    public User updateUser(User user) {
         String sqlQuery = "UPDATE users SET name = ?, login = ?, email = ?, birthday = ? " +
                 "WHERE id = ?";
         String name = user.getName();
