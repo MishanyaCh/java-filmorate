@@ -76,7 +76,6 @@ public class InMemoryUserStorage implements UserStorage {
         friendIdsList.remove(userId); // удаляем пользователя у друга
     }
 
-
     private int generateId() {
         return ++id;
     }
