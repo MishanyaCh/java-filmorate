@@ -6,10 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
@@ -56,6 +53,29 @@ public class InMemoryUserStorage implements UserStorage {
         }
         return user;
     }
+
+    @Override
+    public void addFriend(int userId, int friendId) {
+        User user = users.get(userId);
+        Set<Integer> idsList = user.getFriendsIds(); // получаем поле, хранящее id друзей
+        idsList.add(friendId); // добавляем нового друга к пользователю
+
+        User friend = users.get(friendId);
+        Set<Integer> friendIdsList = friend.getFriendsIds();
+        friendIdsList.add(userId); // добавляем пользователя к другу
+    }
+
+    @Override
+    public void deleteFriend(int userId, int friendId) {
+        User user = users.get(userId);
+        Set<Integer> idsList = user.getFriendsIds(); // получаем поле, хранящее id друзей
+        idsList.remove(friendId); // удаляем друга пользователя
+
+        User friend = users.get(friendId);
+        Set<Integer> friendIdsList = friend.getFriendsIds();
+        friendIdsList.remove(userId); // удаляем пользователя у друга
+    }
+
 
     private int generateId() {
         return ++id;
