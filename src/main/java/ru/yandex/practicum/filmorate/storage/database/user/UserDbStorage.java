@@ -61,4 +61,16 @@ public class UserDbStorage implements UserStorage {
         }
         return users.get(0);
     }
+
+    public void addFriend(int userId, int friendId) {
+        String sqlQuery = "INSERT INTO friends_list (user_id, friend_id) " +
+                "VALUES (?, ?)";
+        jdbcTemplate.update(sqlQuery, userId, friendId);
+    }
+
+    public void deleteFriend(int userId, int friendId) {
+        String sqlQuery = "DELETE FROM friends_list" +
+                "WHERE user_id = ? AND friend_id = ?";
+        jdbcTemplate.update(sqlQuery, userId, friendId);
+    }
 }
