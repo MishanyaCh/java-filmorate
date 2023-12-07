@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.storage.GenreStorage;
 
 import java.util.List;
 
 @Component
-public class GenreDbStorage {
+public class GenreDbStorage implements GenreStorage {
     private static final Logger log = LoggerFactory.getLogger(GenreDbStorage.class);
     private final JdbcTemplate jdbcTemplate;
 
