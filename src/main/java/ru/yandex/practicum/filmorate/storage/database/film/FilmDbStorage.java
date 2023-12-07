@@ -29,6 +29,7 @@ public class FilmDbStorage implements FilmStorage {
         jdbcTemplate = jdbcTemplateArg;
     }
 
+    @Override
     public Film createFilm(Film film) {
         String sqlQuery = "INSERT INTO films (name, description, releaseDate, duration, ratingMPA_id)" +
                 "VALUES (?, ?, ?, ?, ?)";
@@ -40,6 +41,7 @@ public class FilmDbStorage implements FilmStorage {
         return film;
     }
 
+    @Override
     public Film updateFilm(Film film) {
         String sqlQuery = "UPDATE films SET " +
                 "name = ?, " +
@@ -60,6 +62,7 @@ public class FilmDbStorage implements FilmStorage {
         return film;
     }
 
+    @Override
     public List<Film> getFilms() {
         String sqlQuery = "SELECT * FROM films AS f " +
                 "INNER JOIN rating_MPA AS r ON f.ratingMPA_id = r.id";
@@ -73,6 +76,7 @@ public class FilmDbStorage implements FilmStorage {
         return films;
     }
 
+    @Override
     public Film getFilm(int id) {
         String sqlQuery = "SELECT * FROM films AS f " +
                 "INNER JOIN rating_MPA AS r ON f.ratingMPA_id = r.id " +
@@ -88,6 +92,20 @@ public class FilmDbStorage implements FilmStorage {
         Set<Genre> genres = film.getGenres();
         genres.addAll(genresList);
         return film;
+    }
+
+    @Override
+    public void addLike(int filmId, int userId) {
+        String sqlQuery = "INSERT INTO likes (film_id, user_id) " +
+                "VALUE (?, ?)";
+        jdbcTemplate.update(sqlQuery, filmId, userId);
+    }
+
+    @Override
+    public void deleteLike(int filmId, int userId) {
+        String sqlQuery = "DELETE FROM likes " +
+                "WHERE user_id = ? AND film_id = ?";
+        jdbcTemplate.update(sqlQuery, filmId, userId);
     }
 
     private void addFilmGenres(int filmId, Set<Genre> genres) {
