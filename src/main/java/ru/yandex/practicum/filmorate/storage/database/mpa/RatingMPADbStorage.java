@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.RatingMPA;
+import ru.yandex.practicum.filmorate.storage.RatingMPAStorage;
 
 import java.util.List;
 
 @Component
-public class RatingMPADbStorage {
+public class RatingMPADbStorage implements RatingMPAStorage {
     private static final Logger log = LoggerFactory.getLogger(RatingMPADbStorage.class);
     private final JdbcTemplate jdbcTemplate;
 
@@ -19,7 +20,7 @@ public class RatingMPADbStorage {
         jdbcTemplate = jdbcTemplateArg;
     }
 
-    public List<RatingMPA> getRatingMPA() {
+    public List<RatingMPA> getRatingsMPA() {
         String sqlQuery = "SELECT * FROM rating_MPA";
         return jdbcTemplate.query(sqlQuery, new RatingMPARowMapper());
     }
