@@ -108,6 +108,11 @@ public class FilmDbStorage implements FilmStorage {
         jdbcTemplate.update(sqlQuery, filmId, userId);
     }
 
+    @Override
+    public List<Film> getPopularFilms(int count) {
+        return null;
+    }
+
     private void addFilmGenres(int filmId, Set<Genre> genres) {
         String sqlQuery = "INSERT INTO films_genre (film_id, genre_id) " +
                 "VALUES (?, ?)";
