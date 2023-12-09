@@ -79,4 +79,14 @@ public class UserDbStorage implements UserStorage {
                 "WHERE user_id = ? AND friend_id = ?";
         jdbcTemplate.update(sqlQuery, userId, friendId);
     }
+
+    @Override
+    public List<User> getUserFriends(int userId) {
+        return null;
+    }
+
+    @Override
+    public List<User> getCommonFriendsWithOtherUser(int userId, int otherUserId) {
+        return null;
+    }
 }
