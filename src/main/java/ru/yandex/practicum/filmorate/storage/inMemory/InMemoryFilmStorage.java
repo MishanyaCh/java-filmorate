@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmPopularityComparator;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.*;
@@ -66,6 +67,22 @@ public class InMemoryFilmStorage implements FilmStorage {
         Film film = films.get(filmId);
         Set<Integer> likes = film.getLikes(); // получем поле, хранящее лайки
         likes.remove(userId); // удаляем лайк у выбранного фильму
+    }
+
+    @Override
+    public List<Film> getPopularFilms(int count) {
+        List<Film> filmsList = new ArrayList<>(films.values()); // получаем список всех фильмов
+        filmsList.sort(new FilmPopularityComparator().reversed()); // сортируем все фильмы по популярности
+        List<Film> popularFilms = new ArrayList<>(); // список популярных фильмов
+        if (filmsList.size() < count) {
+            popularFilms.addAll(filmsList);
+            return popularFilms;
+        }
+        for (int i = 0; i < count; i++) { // добавляем первые count популярных фильмов
+            Film film = filmsList.get(i);
+            popularFilms.add(film);
+        }
+        return popularFilms;
     }
 
     private int generateId() {
