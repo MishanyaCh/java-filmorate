@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+@Component("UserDbStorage")
 public class UserDbStorage implements UserStorage {
     private static final Logger log = LoggerFactory.getLogger(UserDbStorage.class);
     private final JdbcTemplate jdbcTemplate;
@@ -82,11 +82,26 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getUserFriends(int userId) {
-        return null;
+        String sqlQuery = "SELECT * FROM users " +
+                "WHERE id IN (SELECT friend_id " +
+                              "FROM friends_list " +
+                              "WHERE user_id = ?)";
+        List<User> userFriendsList = jdbcTemplate.query(sqlQuery, new UserRowMapper(), userId);
+        return userFriendsList;
     }
 
     @Override
     public List<User> getCommonFriendsWithOtherUser(int userId, int otherUserId) {
-        return null;
+        String sqlQuery = "SELECT * FROM users " +
+                "WHERE id IN (SELECT f_table1.friend_id " +
+                              "FROM (SELECT user_id, friend_id " +
+                                     "FROM friends_list " +
+                                     "WHERE user_id = ?) AS f_table1" +
+                              "INNER JOIN (SELECT friend_id, user_id " +
+                                           "FROM friends_list" +
+                                           "WHERE user_id = ?) AS f_table2 " +
+                              "ON f_table1.friend_id = f_table2.friend_id";
+        List<User> commonFriendsList = jdbcTemplate.query(sqlQuery, new UserRowMapper(), userId, otherUserId);
+        return commonFriendsList;
     }
 }
