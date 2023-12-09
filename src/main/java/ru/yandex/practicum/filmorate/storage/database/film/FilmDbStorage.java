@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-@Component
+@Component("FilmDbStorage")
 public class FilmDbStorage implements FilmStorage {
     private static final Logger log = LoggerFactory.getLogger(FilmDbStorage.class);
     private final JdbcTemplate jdbcTemplate;
@@ -110,7 +110,23 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> getPopularFilms(int count) {
-        return null;
+        String sqlQuery = "SELECT * " +
+                "FROM (SELECT film_id, " +
+                              "COUNT(DISTINCT user_id) AS count_likes" +
+                       "FROM likes" +
+                       "GROUP BY film_id" +
+                       "ORDER BY count_likes DESC" +
+                       "LIMIT ?) AS top_N_films " +
+                "INNER JOIN films AS f ON top_N_films.film_id = f.id " +
+                "INNER JOIN rating_MPA AS mpa ON f.ratingMPA_id = mpa.id";
+        List<Film> popularFilms = jdbcTemplate.query(sqlQuery, new FilmRowMapper(), count);
+        for (Film film : popularFilms) {
+            int filmId = film.getId();
+            List<Genre> genresList = getFilmGenres(filmId);
+            Set<Genre> genres = film.getGenres();
+            genres.addAll(genresList);
+        }
+        return popularFilms;
     }
 
     private void addFilmGenres(int filmId, Set<Genre> genres) {
@@ -137,7 +153,6 @@ public class FilmDbStorage implements FilmStorage {
                 "FROM films_genre AS f_g " +
                 "INNER JOIN genre AS g ON f_g.genre_id = g.id " +
                 "WHERE f_g.film_id = ?";
-
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sqlQuery, filmId);
         while (rowSet.next()) {
             int id = rowSet.getInt("genre_id");
