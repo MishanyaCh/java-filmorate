@@ -76,6 +76,33 @@ public class InMemoryUserStorage implements UserStorage {
         friendIdsList.remove(userId); // удаляем пользователя у друга
     }
 
+    @Override
+    public List<User> getUserFriends(int userId) {
+        List<User> friendsList = new ArrayList<>(); // список друзей пользователя
+        User user = users.get(userId); // находим пользователя по id
+        for (int id : user.getFriendsIds()) { // в цикле проходимся по id, находим друзей и добавляем в список друзей
+            User friend = users.get(id);
+            friendsList.add(friend);
+        }
+        return friendsList;
+    }
+
+    @Override
+    public List<User> getCommonFriendsWithOtherUser(int userId, int otherUserId) {
+        List<User> commonFriendsList = new ArrayList<>();
+        User user = users.get(userId);
+        User otherUser = users.get(otherUserId);
+        for (int id : user.getFriendsIds()) {
+            for (int otherId : otherUser.getFriendsIds()) {
+                if (id == otherId) {
+                    User commonFriend = users.get(id);
+                    commonFriendsList.add(commonFriend);
+                }
+            }
+        }
+        return commonFriendsList;
+    }
+
     private int generateId() {
         return ++id;
     }
