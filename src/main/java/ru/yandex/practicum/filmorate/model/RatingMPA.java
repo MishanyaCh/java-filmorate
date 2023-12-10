@@ -17,6 +17,10 @@ public class RatingMPA {
     @NotBlank
     private String name;
 
+    public RatingMPA() {
+
+    }
+
     public RatingMPA(int idArg, String nameArg) {
         id = idArg;
         name = nameArg;
