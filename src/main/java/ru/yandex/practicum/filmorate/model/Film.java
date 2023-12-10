@@ -38,6 +38,10 @@ public class Film {
     private Set<Integer> likes = new HashSet<>(); // множество для хранения лайков
     private Set<Genre> genres = new HashSet<>(); // множество для хранения жанров фильма
 
+    public Film() {
+
+    }
+
     public Film(String nameArg, String descriptionArg, LocalDate releaseDateArg, int durationArg) {
         name = nameArg;
         description = descriptionArg;
