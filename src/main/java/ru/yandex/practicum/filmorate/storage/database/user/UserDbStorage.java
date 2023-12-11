@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,13 +38,12 @@ public class UserDbStorage implements UserStorage {
     public User updateUser(User user) {
         String sqlQuery = "UPDATE users SET name = ?, login = ?, email = ?, birthday = ? " +
                 "WHERE id = ?";
-        String name = user.getName();
-        String login = user.getLogin();
-        String email = user.getEmail();
-        LocalDate birthday = user.getBirthday();
-        int id = user.getId();
-        Object[] args = {name, login, email, birthday, id};
-        jdbcTemplate.update(sqlQuery, args);
+        Object[] args = {user.getName(), user.getLogin(), user.getEmail(), user.getBirthday(), user.getId()};
+        int countUpdatedRows = jdbcTemplate.update(sqlQuery, args);
+        if (countUpdatedRows == 0) {
+            log.debug("Данные пользователя с id={} не удалось обновить в базе данных", user.getId());
+            return null;
+        }
         return user;
     }
 
@@ -86,8 +84,7 @@ public class UserDbStorage implements UserStorage {
                 "WHERE id IN (SELECT friend_id " +
                               "FROM friends_list " +
                               "WHERE user_id = ?)";
-        List<User> userFriendsList = jdbcTemplate.query(sqlQuery, new UserRowMapper(), userId);
-        return userFriendsList;
+        return jdbcTemplate.query(sqlQuery, new UserRowMapper(), userId);
     }
 
     @Override
@@ -96,12 +93,11 @@ public class UserDbStorage implements UserStorage {
                 "WHERE id IN (SELECT f_table1.friend_id " +
                               "FROM (SELECT user_id, friend_id " +
                                      "FROM friends_list " +
-                                     "WHERE user_id = ?) AS f_table1" +
+                                     "WHERE user_id = ?) AS f_table1 " +
                               "INNER JOIN (SELECT friend_id, user_id " +
-                                           "FROM friends_list" +
+                                           "FROM friends_list " +
                                            "WHERE user_id = ?) AS f_table2 " +
-                              "ON f_table1.friend_id = f_table2.friend_id";
-        List<User> commonFriendsList = jdbcTemplate.query(sqlQuery, new UserRowMapper(), userId, otherUserId);
-        return commonFriendsList;
+                              "ON f_table1.friend_id = f_table2.friend_id)";
+        return jdbcTemplate.query(sqlQuery, new UserRowMapper(), userId, otherUserId);
     }
 }
