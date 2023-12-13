@@ -31,7 +31,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film createFilm(Film film) {
-        String sqlQuery = "INSERT INTO films (name, description, releaseDate, duration, ratingMPA_id)" +
+        String sqlQuery = "INSERT INTO films (name, description, releaseDate, duration, ratingMPA_id) " +
                 "VALUES (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new FilmPreparedStatementCreator(sqlQuery, film), keyHolder);
@@ -50,6 +50,7 @@ public class FilmDbStorage implements FilmStorage {
                 "duration = ?, " +
                 "ratingMPA_id = ? " +
                 "WHERE id = ?";
+
         String name = film.getName();
         String description = film.getDescription();
         LocalDate releaseDate = film.getReleaseDate();
@@ -57,14 +58,20 @@ public class FilmDbStorage implements FilmStorage {
         RatingMPA mpa = film.getMpa();
         int id = film.getId();
         Object[] args = {name, description, releaseDate, duration, mpa.getId(), id};
-        jdbcTemplate.update(sqlQuery, args);
+
+        int countUpdatedRows = jdbcTemplate.update(sqlQuery, args);
+        if (countUpdatedRows == 0) {
+            log.debug("Данные фильма с id={} не удалось обновить в базе данных", film.getId());
+            return null;
+        }
         updateFilmGenres(id, film.getGenres());
         return film;
     }
 
     @Override
     public List<Film> getFilms() {
-        String sqlQuery = "SELECT * FROM films AS f " +
+        String sqlQuery = "SELECT f.id, f.name, f.description, f.releaseDate, f.duration, f.ratingMPA_id, r.name " +
+                "FROM films AS f " +
                 "INNER JOIN rating_MPA AS r ON f.ratingMPA_id = r.id";
         List<Film> films = jdbcTemplate.query(sqlQuery, new FilmRowMapper());
         for (Film film : films) {
@@ -78,7 +85,8 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getFilm(int id) {
-        String sqlQuery = "SELECT * FROM films AS f " +
+        String sqlQuery = "SELECT f.id, f.name, f.description, f.releaseDate, f.duration, f.ratingMPA_id, r.name " +
+                "FROM films AS f " +
                 "INNER JOIN rating_MPA AS r ON f.ratingMPA_id = r.id " +
                 "WHERE f.id = ?";
         List<Film> films = jdbcTemplate.query(sqlQuery, new FilmRowMapper(), id);
@@ -97,7 +105,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public void addLike(int filmId, int userId) {
         String sqlQuery = "INSERT INTO likes (film_id, user_id) " +
-                "VALUE (?, ?)";
+                "VALUES (?, ?)";
         jdbcTemplate.update(sqlQuery, filmId, userId);
     }
 
@@ -112,10 +120,10 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> getPopularFilms(int count) {
         String sqlQuery = "SELECT * " +
                 "FROM (SELECT film_id, " +
-                              "COUNT(DISTINCT user_id) AS count_likes" +
-                       "FROM likes" +
-                       "GROUP BY film_id" +
-                       "ORDER BY count_likes DESC" +
+                              "COUNT(DISTINCT user_id) AS count_likes " +
+                       "FROM likes " +
+                       "GROUP BY film_id " +
+                       "ORDER BY count_likes DESC " +
                        "LIMIT ?) AS top_N_films " +
                 "INNER JOIN films AS f ON top_N_films.film_id = f.id " +
                 "INNER JOIN rating_MPA AS mpa ON f.ratingMPA_id = mpa.id";
