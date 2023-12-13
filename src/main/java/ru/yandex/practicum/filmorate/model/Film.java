@@ -75,6 +75,14 @@ public class Film {
         } else {
             result = result + ", releaseDate='null'";
         }
-        return result + ", duration=" + duration + "}" + '\n';
+
+        result = result + ", duration=" + duration;
+
+        if (mpa != null) {
+            result = result + ", RatingMPA{" + "id=" + mpa.getId() + ", name='" + mpa.getName() +'\'' + "}";
+        } else {
+            result = result + ", RatingMPA{" + "id=0" + ", name='null'" + "}";
+        }
+        return result + "}" + '\n';
     }
 }
