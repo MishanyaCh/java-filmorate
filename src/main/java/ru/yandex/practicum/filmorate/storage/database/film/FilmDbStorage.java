@@ -118,15 +118,30 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> getPopularFilms(int count) {
-        String sqlQuery = "SELECT * " +
-                "FROM (SELECT film_id, " +
-                              "COUNT(DISTINCT user_id) AS count_likes " +
-                       "FROM likes " +
-                       "GROUP BY film_id " +
-                       "ORDER BY count_likes DESC " +
-                       "LIMIT ?) AS top_N_films " +
-                "INNER JOIN films AS f ON top_N_films.film_id = f.id " +
-                "INNER JOIN rating_MPA AS mpa ON f.ratingMPA_id = mpa.id";
+        String sqlQuery;
+        if (isEmptyTable()) {
+            sqlQuery = "SELECT f.id, f.name, f.description, f.releaseDate, f.duration, f.ratingMPA_id, r.name " +
+                    "FROM films AS f " +
+                    "INNER JOIN rating_MPA AS r ON f.ratingMPA_id = r.id " +
+                    "LIMIT ? ";
+        } else {
+            sqlQuery = "SELECT top_films.id, " +
+                              "top_films.name, " +
+                              "top_films.description, " +
+                              "top_films.releaseDate, " +
+                              "top_films.duration, " +
+                              "top_films.ratingMPA_id, " +
+                              "r.name " +
+                    "FROM (SELECT * " +
+                           "FROM (SELECT film_id, COUNT(DISTINCT user_id) AS count_likes " +
+                                  "FROM likes " +
+                                  "GROUP BY film_id " +
+                                  "ORDER BY count_likes DESC " +
+                                  "LIMIT ? " +
+                                ") AS sorted_by_likes " +
+                           "INNER JOIN films AS f ON sorted_by_likes.film_id = f.id) AS top_films " +
+                    "INNER JOIN rating_MPA AS r ON top_films.ratingMPA_id = r.id";
+        }
         List<Film> popularFilms = jdbcTemplate.query(sqlQuery, new FilmRowMapper(), count);
         for (Film film : popularFilms) {
             int filmId = film.getId();
@@ -169,5 +184,16 @@ public class FilmDbStorage implements FilmStorage {
             genres.add(genre);
         }
         return genres;
+    }
+
+    private boolean isEmptyTable() {
+        boolean result = true;
+        String sqlQuery = "SELECT COUNT(*) AS count_rows FROM likes ";
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sqlQuery);
+        if (rowSet.next()) {
+            long countRows = rowSet.getLong("count_rows");
+            if (countRows > 0) result = false;
+        }
+        return result;
     }
 }
