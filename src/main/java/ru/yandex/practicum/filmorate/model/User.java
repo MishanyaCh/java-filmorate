@@ -33,7 +33,8 @@ public class User {
     @JsonIgnore
     private Set<Integer> friendsIds = new HashSet<>(); // множество для хранения id добавляемых друзей
 
-    public User() {}
+    public User() {
+    }
 
     public User(String emailArg, String loginArg, String nameArg, LocalDate birthdayArg) {
         email = emailArg;
