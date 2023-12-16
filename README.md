@@ -2,7 +2,7 @@
 
 ## Схема БД Filmorate
 <picture>
-    <img src="https://github.com/MishanyaCh/java-filmorate/blob/sprint-11-midline/Filmorate%20DB%20scheme.png">
+    <img src="https://raw.githubusercontent.com/MishanyaCh/java-filmorate/a40926fdecd8024582961e2442509429ecc2e379/FilmorateDB%20schema.png">
 </picture>
 
 ## Примеры основных SQL запросов к БД
