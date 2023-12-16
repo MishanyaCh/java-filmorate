@@ -79,7 +79,7 @@ public class Film {
         result = result + ", duration=" + duration;
 
         if (mpa != null) {
-            result = result + ", RatingMPA{" + "id=" + mpa.getId() + ", name='" + mpa.getName() +'\'' + "}";
+            result = result + ", RatingMPA{" + "id=" + mpa.getId() + ", name='" + mpa.getName() + '\'' + "}";
         } else {
             result = result + ", RatingMPA{" + "id=0" + ", name='null'" + "}";
         }
