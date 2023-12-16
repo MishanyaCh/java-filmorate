@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -34,9 +35,10 @@ public class Film {
 
     private RatingMPA mpa;
 
+    private LinkedHashSet<Genre> genres = new LinkedHashSet<>(); // множество для жанров фильма
+
     @JsonIgnore
     private Set<Integer> likes = new HashSet<>(); // множество для хранения лайков
-    private Set<Genre> genres = new HashSet<>(); // множество для хранения жанров фильма
 
     public Film() {
 
