@@ -62,7 +62,6 @@ public class UserService {
             throw new UserNotFoundException(String.format("Пользователь с id=%d не найден в базе данных. ", friendId));
         }
         userStorage.addFriend(userId, friendId); // добавляем нового друга к пользователю
-        userStorage.addFriend(friendId, userId); // добавляем пользователя к другу
     }
 
     public void deleteFriend(int userId, int friendId) {
@@ -75,7 +74,6 @@ public class UserService {
             throw new UserNotFoundException(String.format("Пользователь с id=%d не найден в базе данных.", friendId));
         }
         userStorage.deleteFriend(userId, friendId); // удаляем друга пользователя
-        userStorage.deleteFriend(friendId, userId); // удаляем пользователя у друга
     }
 
     public List<User> getUserFriends(int userId) {
