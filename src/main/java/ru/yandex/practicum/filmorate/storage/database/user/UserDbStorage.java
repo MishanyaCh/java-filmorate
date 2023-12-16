@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,7 +39,13 @@ public class UserDbStorage implements UserStorage {
     public User updateUser(User user) {
         String sqlQuery = "UPDATE users SET name = ?, login = ?, email = ?, birthday = ? " +
                 "WHERE id = ?";
-        Object[] args = {user.getName(), user.getLogin(), user.getEmail(), user.getBirthday(), user.getId()};
+        String name = user.getName();
+        String login = user.getLogin();
+        String email = user.getEmail();
+        LocalDate birthday = user.getBirthday();
+        int id = user.getId();
+        Object[] args = {name, login, email, birthday, id};
+
         int countUpdatedRows = jdbcTemplate.update(sqlQuery, args);
         if (countUpdatedRows == 0) {
             log.debug("Данные пользователя с id={} не удалось обновить в базе данных", user.getId());
