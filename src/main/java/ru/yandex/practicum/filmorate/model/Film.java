@@ -40,8 +40,7 @@ public class Film {
     @JsonIgnore
     private Set<Integer> likes = new HashSet<>(); // множество для хранения лайков
 
-    public Film() {
-    }
+    public Film() {}
 
     public Film(String nameArg, String descriptionArg, LocalDate releaseDateArg, int durationArg) {
         name = nameArg;
