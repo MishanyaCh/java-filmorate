@@ -17,7 +17,8 @@ public class Genre {
     @NotBlank
     private String name;
 
-    public Genre() {}
+    public Genre() {
+    }
 
     public Genre(int idArd, String nameArg) {
         id = idArd;
