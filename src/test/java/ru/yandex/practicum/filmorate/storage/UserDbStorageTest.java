@@ -38,23 +38,26 @@ public class UserDbStorageTest {
     @Test
     public void insertNewUser() {
         User createdUser1 = userStorage.createUser(user1);
+        int userId = createdUser1.getId();
         User createdUser2 = userStorage.createUser(user2);
+        int otherUserId = createdUser2.getId();
 
         assertThat(createdUser1)
                 .isNotNull()
-                .hasFieldOrPropertyWithValue("id", 1)
+                .hasFieldOrPropertyWithValue("id", userId)
                 .usingRecursiveComparison().isEqualTo(user1);
 
         assertThat(createdUser2)
                 .isNotNull()
-                .hasFieldOrPropertyWithValue("id",2)
+                .hasFieldOrPropertyWithValue("id", otherUserId)
                 .usingRecursiveComparison().isEqualTo(user2);
     }
 
     @Test
     public void updateExistingUser() {
-        userStorage.createUser(user1);
-        User userWithChangedLogin = new User(1,"chizh909@mail.ru", "Tanchen",
+        User createdUser = userStorage.createUser(user1);
+        int id = createdUser.getId();
+        User userWithChangedLogin = new User(id,"chizh909@mail.ru", "Tanchen",
                 "Михаил", LocalDate.of(1995,12, 6));
         User updatedUser1 = userStorage.updateUser(userWithChangedLogin);
 
@@ -85,7 +88,8 @@ public class UserDbStorageTest {
     @Test
     public void getUserById() {
         User createdUser1 = userStorage.createUser(user1);
-        User user = userStorage.getUser(1);
+        int userId = createdUser1.getId();
+        User user = userStorage.getUser(userId);
 
         assertThat(user)
                 .isNotNull()

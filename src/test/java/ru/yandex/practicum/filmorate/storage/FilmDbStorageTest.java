@@ -49,23 +49,28 @@ public class FilmDbStorageTest {
     @Test
     public void createNewFilm() {
         Film createdFilmWithoutGenre = filmStorage.createFilm(film1);
+        int filmId = createdFilmWithoutGenre.getId();
         Film createdFilmWithGenre = filmStorage.createFilm(film2);
+        int otherFilmId = createdFilmWithGenre.getId();
 
         assertThat(createdFilmWithoutGenre)
                 .isNotNull()
-                .hasFieldOrPropertyWithValue("id", 1)
+                .hasFieldOrPropertyWithValue("id", filmId)
                 .usingRecursiveComparison().isEqualTo(film1);
 
         assertThat(createdFilmWithGenre)
                 .isNotNull()
-                .hasFieldOrPropertyWithValue("id",2)
+                .hasFieldOrPropertyWithValue("id",otherFilmId)
                 .usingRecursiveComparison().isEqualTo(film2);
     }
 
     @Test
     public void updateExistingFilmWithoutGenre() {
+        Film film = filmStorage.createFilm(film1);
+        int filmId = film.getId();
+
         RatingMPA mpa = new RatingMPA(3, "PG-13");
-        Film updatedFilm1 = new Film(1, "Фильм 1", "Описание для фильма 1",
+        Film updatedFilm1 = new Film(filmId, "Фильм 1", "Описание для фильма 1",
                 LocalDate.of(1999, 5, 16), 120, mpa);
 
         LinkedHashSet<Genre> genres = new LinkedHashSet<>();
@@ -75,7 +80,6 @@ public class FilmDbStorageTest {
         }
         updatedFilm1.setGenres(genres);
 
-        filmStorage.createFilm(film1);
         Film updatedFilmWithGenres = filmStorage.updateFilm(updatedFilm1);
 
         assertThat(updatedFilmWithGenres)
@@ -106,7 +110,8 @@ public class FilmDbStorageTest {
     public void getFilmById() {
         filmStorage.createFilm(film1);
         Film createdFilm2 = filmStorage.createFilm(film2);
-        Film film = filmStorage.getFilm(2);
+        int filmId = createdFilm2.getId();
+        Film film = filmStorage.getFilm(filmId);
 
         assertThat(film)
                 .isNotNull()
