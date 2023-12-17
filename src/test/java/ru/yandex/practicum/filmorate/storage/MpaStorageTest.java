@@ -15,7 +15,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @JdbcTest
-@RequiredArgsConstructor(onConstructor_= @Autowired)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MpaStorageTest {
     private final JdbcTemplate jdbcTemplate;
     private RatingMPAStorage mpaStorage;
@@ -30,7 +30,7 @@ public class MpaStorageTest {
         List<RatingMPA> mpaList = mpaStorage.getRatingsMPA();
 
         Assertions.assertNotNull(mpaList);
-        Assertions.assertEquals(5,mpaList.size());
+        Assertions.assertEquals(5, mpaList.size());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class MpaStorageTest {
 
         assertThat(mpa)
                 .isNotNull()
-                .hasFieldOrPropertyWithValue("id",4)
+                .hasFieldOrPropertyWithValue("id", 4)
                 .hasFieldOrPropertyWithValue("name", "R");
     }
 }
