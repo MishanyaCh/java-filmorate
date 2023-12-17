@@ -22,11 +22,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film createFilm(Film film) {
-        if (film.getId() > 0) {
-            log.debug("Фильм '{}' c id={} не может быть добавлен.", film.getName(), film.getId() + '\n' +
-                    "Для добавления нового фильма id должен быть равен нулю");
-            return null;
-        }
         int filmId = generateId();
         film.setId(filmId);
         films.put(filmId, film);

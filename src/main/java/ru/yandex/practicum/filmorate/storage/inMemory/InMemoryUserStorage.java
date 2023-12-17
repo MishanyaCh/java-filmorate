@@ -21,11 +21,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User createUser(User user) {
-        if (user.getId() > 0) {
-            log.debug("Пользователь '{}' c id={} не может быть добавлен.", user.getName(), user.getId() + '\n' +
-                    "Для добавления нового пользователя id должен быть равен нулю");
-            return null;
-        }
         int userId = generateId();
         user.setId(userId);
         users.put(userId, user);

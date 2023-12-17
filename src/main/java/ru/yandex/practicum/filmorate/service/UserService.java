@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.UserCreateException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
@@ -22,12 +21,7 @@ public class UserService {
 
     public User createUser(User user) {
         UserValidation.validate(user);
-        User createdUser = userStorage.createUser(user);
-        if (createdUser == null) {
-            throw new UserCreateException(String.format("Пользователь с id=%d не может быть добавлен в базу данных. " +
-                    "Для добавления нового пользователя id должен быть равен нулю!", user.getId()));
-        }
-        return createdUser;
+        return userStorage.createUser(user);
     }
 
     public User updateUser(User user) {

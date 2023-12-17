@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.FilmCreateException;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -28,12 +27,7 @@ public class FilmService {
 
     public Film createFilm(Film film) {
         FilmValidation.validate(film);
-        Film createdFilm = filmStorage.createFilm(film);
-        if (createdFilm == null) {
-            throw new FilmCreateException(String.format("Фильм с id=%d не может быть добавлен в базу данных. " +
-                    "Для добавления нового фильма id должен быть равен нулю.!", film.getId()));
-        }
-        return createdFilm;
+        return filmStorage.createFilm(film);
     }
 
     public Film updateFilm(Film film) {
