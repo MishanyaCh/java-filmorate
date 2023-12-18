@@ -1,18 +1,15 @@
 
-ALTER TABLE rating_MPA ALTER COLUMN id RESTART WITH 1;
-ALTER TABLE genre ALTER COLUMN id RESTART WITH 1;
-ALTER TABLE films ALTER COLUMN id RESTART WITH 1;
-ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
+MERGE INTO rating_MPA (id, name)
+KEY (id) VALUES (1, 'G'),
+                (2, 'PG'),
+                (3, 'PG-13'),
+                (4, 'R'),
+                (5, 'NC-17');
 
-INSERT INTO rating_MPA (name) VALUES ('G');
-INSERT INTO rating_MPA (name) VALUES ('PG');
-INSERT INTO rating_MPA (name) VALUES ('PG-13');
-INSERT INTO rating_MPA (name) VALUES ('R');
-INSERT INTO rating_MPA (name) VALUES ('NC-17');
-
-INSERT INTO genre (name) VALUES ('Комедия');
-INSERT INTO genre (name) VALUES ('Драма');
-INSERT INTO genre (name) VALUES ('Мультфильм');
-INSERT INTO genre (name) VALUES ('Триллер');
-INSERT INTO genre (name) VALUES ('Документальный');
-INSERT INTO genre (name) VALUES ('Боевик');
+MERGE INTO genre (id, name)
+KEY (id) VALUES (1, 'Комедия'),
+                (2, 'Драма'),
+                (3, 'Мультфильм'),
+                (4, 'Триллер'),
+                (5, 'Документальный'),
+                (6, 'Боевик');
