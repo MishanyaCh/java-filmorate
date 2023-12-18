@@ -1,14 +1,14 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.RatingMPANotFoundException;
 import ru.yandex.practicum.filmorate.model.RatingMPA;
 import ru.yandex.practicum.filmorate.storage.RatingMPAStorage;
 
 import java.util.List;
 
-@Component
+@Service
 public class RatingMPAService {
     private final RatingMPAStorage ratingMPAStorage;
 
