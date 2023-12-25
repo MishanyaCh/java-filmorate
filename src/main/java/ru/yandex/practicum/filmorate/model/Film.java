@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -32,14 +33,31 @@ public class Film {
     @Positive
     private int duration;
 
+    private RatingMPA mpa;
+
+    private LinkedHashSet<Genre> genres = new LinkedHashSet<>(); // множество для жанров фильма
+
     @JsonIgnore
     private Set<Integer> likes = new HashSet<>(); // множество для хранения лайков
+
+    public Film() {
+    }
 
     public Film(String nameArg, String descriptionArg, LocalDate releaseDateArg, int durationArg) {
         name = nameArg;
         description = descriptionArg;
         releaseDate = releaseDateArg;
         duration = durationArg;
+    }
+
+    public Film(int idArg, String nameArg, String descriptionArg, LocalDate releaseDateArg, int durationArg,
+                RatingMPA mpaArg) {
+        id = idArg;
+        name = nameArg;
+        description = descriptionArg;
+        releaseDate = releaseDateArg;
+        duration = durationArg;
+        mpa = mpaArg;
     }
 
     @Override
@@ -58,6 +76,14 @@ public class Film {
         } else {
             result = result + ", releaseDate='null'";
         }
-        return result + ", duration=" + duration + "}" + '\n';
+
+        result = result + ", duration=" + duration;
+
+        if (mpa != null) {
+            result = result + ", RatingMPA{" + "id=" + mpa.getId() + ", name='" + mpa.getName() + '\'' + "}";
+        } else {
+            result = result + ", RatingMPA{" + "id=0" + ", name='null'" + "}";
+        }
+        return result + "}" + '\n';
     }
 }
